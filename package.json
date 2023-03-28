@@ -1,5 +1,9 @@
 {
   "devDependencies": {
     "typescript": "^5.0.2"
+  },
+  "scripts": {
+    "start:db": "json-server -w db.json",
+    "start:parcel" : "parcel index.html"
   }
 }
