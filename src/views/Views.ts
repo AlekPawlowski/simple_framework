@@ -49,12 +49,20 @@ export abstract class View<T extends Model<K>, K> {
         }
     }
 
+    onRender(): void {}
+
     render(): void {
         this.parent.innerHTML = '';
+        
         const templateElemetnt = document.createElement('template');
         templateElemetnt.innerHTML = this.template();
+        
         this.bindEvents(templateElemetnt.content);
         this.mapRegions(templateElemetnt.content);
+
+        this.onRender();
+
+
         this.parent.append(templateElemetnt.content);
     }
 }
