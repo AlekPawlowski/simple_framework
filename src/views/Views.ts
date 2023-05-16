@@ -1,13 +1,23 @@
+import { Model } from "../models/Model";
 import { User } from "../models/User";
 
-export abstract class View {
-    abstract eventsMap(): {[key: string]: ()  => void;};;
-    abstract template(): string;
+export abstract class View<T extends Model<K>, K> {
+    regions: { [key: string]: Element } = {};
+
     constructor(
         public parent: Element,
         public model: User,
     ) {
         this.bindModel();
+    }
+    abstract template(): string;
+
+    regionsMap(): { [key: string]: string } {
+        return {} 
+    }
+
+    eventsMap(): { [key: string]: () => void } { 
+        return {} 
     }
 
     bindModel(): void {
@@ -28,11 +38,23 @@ export abstract class View {
         }
     }
 
+    mapRegions(fragment: DocumentFragment): void {
+        const regionsMap = this.regionsMap();
+        for (let key in regionsMap) {
+            const selector = regionsMap[key];
+            const element  = fragment.querySelector(selector);
+            if(element){
+                this.regions[key] = element;
+            }
+        }
+    }
+
     render(): void {
         this.parent.innerHTML = '';
         const templateElemetnt = document.createElement('template');
         templateElemetnt.innerHTML = this.template();
         this.bindEvents(templateElemetnt.content);
+        this.mapRegions(templateElemetnt.content);
         this.parent.append(templateElemetnt.content);
     }
 }
