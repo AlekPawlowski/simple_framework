@@ -20,9 +20,12 @@ export class Collection<T, K> {
     }
 
     fetch(): void {
+        console.log(this.rootUrl)
         axios.get(this.rootUrl)
         .then((response: AxiosResponse) => {
+            console.log("response: " + response);
             response.data.forEach((value: K) => {
+                console.log(value)
                 this.models.push(this.deserialize(value));
             });
         })
